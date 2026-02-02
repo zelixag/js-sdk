@@ -1,0 +1,29 @@
+/* pages/index/index.wxss */
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.controls {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.status-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 12px;
+}

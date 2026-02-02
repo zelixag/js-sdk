@@ -1,0 +1,21 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <canvas
+    type="webgl"
+    id="avatar-canvas"
+    style="width: 100vw; height: 100vh;"
+    bindtouchstart="handleTouchStart"
+    bindtouchmove="handleTouchMove"
+    bindtouchend="handleTouchEnd"
+  ></canvas>
+  <view class="controls">
+    <button bindtap="onStart">启动</button>
+    <button bindtap="onPause">暂停</button>
+    <button bindtap="onResume">恢复</button>
+    <button bindtap="onStop">停止</button>
+  </view>
+  <view class="status-panel">
+    <view>SDK状态: {{sdkState}}</view>
+    <view>连接状态: {{connectionStatus}}</view>
+  </view>
+</view>

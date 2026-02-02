@@ -1,0 +1,71 @@
+.
+├── ARCHITECTURE.md
+├── DIRECTORY_STRUCTURE.txt
+├── PROJECT_SUMMARY.md
+├── README.md
+├── USAGE.md
+├── dist
+│   ├── adapters
+│   │   ├── CanvasAdapter.d.ts
+│   │   ├── CanvasAdapter.d.ts.map
+│   │   ├── WebSocketAdapter.d.ts
+│   │   ├── WebSocketAdapter.d.ts.map
+│   │   ├── index.d.ts
+│   │   └── index.d.ts.map
+│   ├── core
+│   │   ├── AvatarSDK.d.ts
+│   │   ├── AvatarSDK.d.ts.map
+│   │   ├── EventBus.d.ts
+│   │   ├── EventBus.d.ts.map
+│   │   ├── LifecycleManager.d.ts
+│   │   ├── LifecycleManager.d.ts.map
+│   │   ├── StateManager.d.ts
+│   │   ├── StateManager.d.ts.map
+│   │   ├── index.d.ts
+│   │   └── index.d.ts.map
+│   ├── core.js
+│   ├── core.js.map
+│   ├── index.d.ts
+│   ├── index.d.ts.map
+│   ├── index.esm.js
+│   ├── index.esm.js.map
+│   ├── index.js
+│   ├── index.js.map
+│   ├── types
+│   │   ├── index.d.ts
+│   │   └── index.d.ts.map
+│   └── utils
+│       ├── Logger.d.ts
+│       ├── Logger.d.ts.map
+│       ├── index.d.ts
+│       └── index.d.ts.map
+├── examples
+│   ├── advanced
+│   └── basic
+│       ├── app.json
+│       └── pages
+├── package.json
+├── pnpm-lock.yaml
+├── rollup.config.js
+├── src
+│   ├── adapters
+│   │   ├── CanvasAdapter.ts
+│   │   ├── WebSocketAdapter.ts
+│   │   └── index.ts
+│   ├── core
+│   │   ├── AvatarSDK.ts
+│   │   ├── EventBus.ts
+│   │   ├── LifecycleManager.ts
+│   │   ├── StateManager.ts
+│   │   └── index.ts
+│   ├── index.ts
+│   ├── modules
+│   ├── plugins
+│   ├── types
+│   │   └── index.ts
+│   └── utils
+│       ├── Logger.ts
+│       └── index.ts
+└── tsconfig.json
+
+16 directories, 52 files
