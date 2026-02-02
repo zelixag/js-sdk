@@ -1,6 +1,6 @@
 // pages/index/index.js
 // 引入SDK
-const AvatarSDKModule = require('../../../utils/avatar-sdk.js');
+const AvatarSDKModule = require('../../utils/avatar-sdk.js');
 const AvatarSDK = AvatarSDKModule.default || AvatarSDKModule;
 const { SDKState, ConnectionStatus } = AvatarSDKModule;
 
