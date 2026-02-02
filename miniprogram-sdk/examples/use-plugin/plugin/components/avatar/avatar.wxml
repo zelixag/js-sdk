@@ -1,0 +1,10 @@
+<!--components/avatar/avatar.wxml-->
+<view class="avatar-container">
+  <canvas
+    type="webgl"
+    id="{{canvasId}}"
+    canvas-id="{{canvasId}}"
+    class="avatar-canvas"
+  ></canvas>
+  <slot></slot>
+</view>

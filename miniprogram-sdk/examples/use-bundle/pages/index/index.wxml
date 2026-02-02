@@ -1,0 +1,68 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <view class="header">
+    <text class="title">使用打包后的 SDK Bundle</text>
+    <text class="subtitle">直接复制 bundle 目录即可使用</text>
+  </view>
+
+  <!-- Canvas 区域 -->
+  <view class="canvas-section">
+    <canvas
+      type="webgl"
+      id="avatar-canvas"
+      class="avatar-canvas"
+    ></canvas>
+  </view>
+
+  <!-- 状态显示 -->
+  <view class="status-section">
+    <view class="status-item">
+      <text class="status-label">状态:</text>
+      <text class="status-value">{{status}}</text>
+    </view>
+    <view class="status-item" wx:if="{{progress > 0 && progress < 100}}">
+      <text class="status-label">进度:</text>
+      <text class="status-value">{{progress}}%</text>
+    </view>
+    <view class="status-item" wx:if="{{errorMessage}}">
+      <text class="status-label error">错误:</text>
+      <text class="status-value error">{{errorMessage}}</text>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-section">
+    <button 
+      class="control-btn init-btn" 
+      bindtap="initSDK"
+      disabled="{{isInitialized}}"
+    >
+      初始化 SDK
+    </button>
+    <button 
+      class="control-btn start-btn" 
+      bindtap="startSDK"
+      disabled="{{!isInitialized}}"
+    >
+      启动
+    </button>
+    <button 
+      class="control-btn destroy-btn" 
+      bindtap="destroySDK"
+      disabled="{{!isInitialized}}"
+    >
+      销毁
+    </button>
+  </view>
+
+  <!-- 说明 -->
+  <view class="info-section">
+    <view class="section-title">使用说明</view>
+    <text class="info-text">
+      1. 将 dist/bundle 目录复制到小程序项目\n
+      2. 在页面中 require 需要的模块\n
+      3. 确保先加载 index-init.js\n
+      4. 所有路径已自动修复，开箱即用
+    </text>
+  </view>
+</view>

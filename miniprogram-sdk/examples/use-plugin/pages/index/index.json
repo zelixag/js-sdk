@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "plugin-avatar": "plugin://xmov-avatar/plugin-avatar"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "name": "@xmov/avatar-miniprogram",
+  "version": "0.1.0-beta.1",
+  "description": "专为微信小程序设计的数字人 SDK，支持 WebGL 渲染和实时语音交互",
+  "main": "dist/xmov-avatar-mp.js",
+  "types": "dist/index.d.ts",
+  "source": "src/single-entry.ts",
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "node build-mp-two.js",
+    "build:legacy": "node build.js",
+    "build:bundle": "node build-bundle.js",
+    "build:single": "node build-single.js",
+    "build:plugin": "node build-plugin.js",
+    "build:simple": "tsc --project minimal-tsconfig.json",
+    "dev": "tsc --watch",
+    "clean": "rimraf dist && mkdir dist 2>nul || echo. > dist/.gitkeep",
+    "test": "ts-node tests/sdk-test.ts",
+    "test:unit": "jest",
+    "test:watch": "jest --watch",
+    "test:prepare": "node examples/test-adapter/copy-sdk.js",
+    "test:miniprogram": "npm run build && npm run test:prepare",
+    "build:copy": "npm run build && node examples/use-bundle/copy-bundle.cjs",
+    "postinstall": "node patch-microbundle-resolve.js"
+  },
+  "type": "commonjs",
+  "keywords": [
+    "miniprogram",
+    "wechat",
+    "avatar",
+    "sdk",
+    "weixin",
+    "digital-human",
+    "webgl",
+    "real-time",
+    "3d-avatar"
+  ],
+  "author": "XMOV Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xmov-team/offline-sdk.git"
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^1.0.3",
+    "blueimp-md5": "^2.19.0",
+    "pako": "^2.1.0",
+    "protobufjs": "^7.5.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/wechat-miniprogram": "^3.4.0",
+    "jest": "^29.5.0",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.0",
+    "esbuild": "^0.24.0",
+    "microbundle": "^0.15.1",
+    "typescript": "^5.9.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.ts"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
+  }
+}

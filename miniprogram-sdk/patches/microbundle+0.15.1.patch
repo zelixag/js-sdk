@@ -1,0 +1,41 @@
+diff --git a/node_modules/microbundle/dist/cli.js b/node_modules/microbundle/dist/cli.js
+index eb2879e..731cb55 100644
+--- a/node_modules/microbundle/dist/cli.js
++++ b/node_modules/microbundle/dist/cli.js
+@@ -1001,7 +1001,7 @@ function createConfig(options, entry, format, writeMeta) {
+         browser: options.target !== 'node',
+         exportConditions: [options.target === 'node' ? 'node' : 'browser'],
+         // defaults + .jsx
+-        extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
++        extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json', '.node'],
+         preferBuiltins: options.target === 'node'
+       }), commonjs__default['default']({
+         // use a regex to make sure to include eventual hoisted packages
+diff --git a/node_modules/microbundle/dist/microbundle.js b/node_modules/microbundle/dist/microbundle.js
+index 5676d07..dde79b3 100644
+--- a/node_modules/microbundle/dist/microbundle.js
++++ b/node_modules/microbundle/dist/microbundle.js
+@@ -999,7 +999,7 @@ function createConfig(options, entry, format, writeMeta) {
+         browser: options.target !== 'node',
+         exportConditions: [options.target === 'node' ? 'node' : 'browser'],
+         // defaults + .jsx
+-        extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
++        extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json', '.node'],
+         preferBuiltins: options.target === 'node'
+       }), commonjs__default['default']({
+         // use a regex to make sure to include eventual hoisted packages
+diff --git a/node_modules/microbundle/src/index.js b/node_modules/microbundle/src/index.js
+index ddf90f2..2b9184e 100644
+--- a/node_modules/microbundle/src/index.js
++++ b/node_modules/microbundle/src/index.js
+@@ -507,8 +507,8 @@ function createConfig(options, entry, format, writeMeta) {
+ 						mainFields: ['module', 'jsnext', 'main'],
+ 						browser: options.target !== 'node',
+ 						exportConditions: [options.target === 'node' ? 'node' : 'browser'],
+-						// defaults + .jsx
+-						extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
++						// include .ts/.tsx so alias targets like ../src/utils/float32-decoder resolve
++						extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json', '.node'],
+ 						preferBuiltins: options.target === 'node',
+ 					}),
+ 					commonjs({

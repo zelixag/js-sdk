@@ -1,0 +1,13 @@
+<!-- 小程序页面 WXML -->
+<view class="container">
+  <canvas 
+    type="webgl" 
+    id="avatar-canvas" 
+    canvas-id="avatar-canvas"
+    class="avatar-canvas"
+  ></canvas>
+  
+  <view class="progress" wx:if="{{progress < 100}}">
+    <text>加载中: {{progress}}%</text>
+  </view>
+</view>

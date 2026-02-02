@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "index": ["../src/index"],
+      "types": ["../src/types/index"],
+      "types/*": ["../src/types/*"],
+      "utils/*": ["../src/utils/*"],
+      "modules/*": ["../src/modules/*"],
+      "utils/float32-decoder": ["../src/utils/float32-decoder"]
+    }
+  },
+  "include": ["src/**/*", "../src/**/*"]
+}

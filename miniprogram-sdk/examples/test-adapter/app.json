@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "index"
+  ],
+  "window": {
+    "navigationBarTitleText": "适配层测试",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f5f5"
+  },
+  "networkTimeout": {
+    "request": 30000,
+    "downloadFile": 30000,
+    "connectSocket": 30000
+  },
+  "usingComponents": {},
+  "debug": true,
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

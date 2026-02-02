@@ -1,0 +1,76 @@
+<view class="container">
+  <!-- 数字人渲染区域 -->
+  <view class="avatar-container">
+    <canvas
+      canvas-id="avatar-canvas"
+      class="avatar-canvas"
+      type="webgl"
+    ></canvas>
+    <view class="status-overlay" wx:if="{{isSpeaking}}">
+      <text class="speaking-indicator">正在说话...</text>
+    </view>
+  </view>
+
+  <!-- 状态显示 -->
+  <view class="status-section">
+    <view class="status-item">
+      <text class="status-label">数字人状态:</text>
+      <text class="status-value">{{avatarStatus}}</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">音量:</text>
+      <text class="status-value">{{volume}}</text>
+    </view>
+  </view>
+
+  <!-- 音量控制 -->
+  <view class="control-section">
+    <view class="slider-container">
+      <text class="slider-label">音量调节</text>
+      <slider
+        class="volume-slider"
+        min="0"
+        max="1"
+        step="0.01"
+        value="{{volume}}"
+        bindchange="setVolume"
+        show-value
+      />
+    </view>
+  </view>
+
+  <!-- 说话文字输入 -->
+  <view class="input-section">
+    <textarea
+      class="text-input"
+      value="{{speakingText}}"
+      placeholder="输入要让数字人说的话..."
+      maxlength="200"
+      bindinput="inputText"
+    />
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-section">
+    <button class="control-btn init-btn" bindtap="initAvatar">初始化</button>
+    <button class="control-btn start-btn" bindtap="startAvatar">启动</button>
+    <button class="control-btn speak-btn" bindtap="speakText">说话</button>
+    <button class="control-btn stop-btn" bindtap="stopAvatar">停止</button>
+    <button class="control-btn invisible-btn" bindtap="setInvisible">隐身</button>
+    <button class="control-btn visible-btn" bindtap="exitInvisible">取消隐身</button>
+    <button class="control-btn destroy-btn" bindtap="destroyAvatar">销毁</button>
+  </view>
+
+  <!-- 功能说明 -->
+  <view class="info-section">
+    <text class="info-title">微信小程序数字人 SDK 使用说明</text>
+    <text class="info-desc">此 SDK 专为微信小程序环境设计，支持在小程序中渲染和控制数字人。</text>
+    <text class="info-features">主要功能：</text>
+    <text class="info-feature-item">• WebGL 渲染数字人模型</text>
+    <text class="info-feature-item">• 实时语音合成功能</text>
+    <text class="info-feature-item">• 状态管理和事件回调</text>
+    <text class="info-feature-item">• 网络状态监控</text>
+    <text class="info-feature-item">• 隐身模式支持</text>
+    <text class="info-feature-item">• 音量控制</text>
+  </view>
+</view>

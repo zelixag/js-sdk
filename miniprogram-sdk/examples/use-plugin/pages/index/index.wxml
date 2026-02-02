@@ -1,0 +1,81 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <view class="header">
+    <text class="title">使用插件方式</text>
+    <text class="subtitle">通过小程序插件使用 SDK</text>
+  </view>
+
+  <!-- 方式 1: 使用插件组件 -->
+  <view class="section">
+    <view class="section-title">方式 1: 使用插件组件</view>
+    <plugin-avatar
+      id="avatar-component"
+      canvas-id="avatar-canvas"
+      config="{{avatarConfig}}"
+      bind:ready="onAvatarReady"
+      bind:error="onAvatarError"
+      bind:statechange="onStateChange"
+      bind:statuschange="onStatusChange"
+      bind:progress="onProgress"
+    />
+  </view>
+
+  <!-- 状态显示 -->
+  <view class="status-section">
+    <view class="status-item">
+      <text class="status-label">状态:</text>
+      <text class="status-value">{{status}}</text>
+    </view>
+    <view class="status-item" wx:if="{{progress > 0 && progress < 100}}">
+      <text class="status-label">进度:</text>
+      <text class="status-value">{{progress}}%</text>
+    </view>
+    <view class="status-item" wx:if="{{errorMessage}}">
+      <text class="status-label error">错误:</text>
+      <text class="status-value error">{{errorMessage}}</text>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-section">
+    <button 
+      class="control-btn start-btn" 
+      bindtap="startAvatar"
+      disabled="{{!isInitialized}}"
+    >
+      启动
+    </button>
+    <button 
+      class="control-btn stop-btn" 
+      bindtap="stopAvatar"
+      disabled="{{!isInitialized}}"
+    >
+      停止
+    </button>
+  </view>
+
+  <!-- 方式 2: 使用插件 API -->
+  <view class="section">
+    <view class="section-title">方式 2: 使用插件 API</view>
+    <view class="info-text">
+      可以通过 requirePlugin('xmov-avatar') 直接使用 SDK API
+    </view>
+    <button 
+      class="control-btn api-btn" 
+      bindtap="usePluginAPI"
+    >
+      使用插件 API
+    </button>
+  </view>
+
+  <!-- 说明 -->
+  <view class="info-section">
+    <view class="section-title">使用说明</view>
+    <text class="info-text">
+      1. 在 app.json 中配置插件\n
+      2. 使用 <plugin-avatar> 组件\n
+      3. 或通过 requirePlugin 使用 API\n
+      4. 插件会自动处理所有依赖
+    </text>
+  </view>
+</view>

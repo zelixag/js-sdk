@@ -1,0 +1,153 @@
+/* 适配层测试页面样式 */
+.container {
+  padding: 20rpx;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.btn {
+  padding: 10rpx 20rpx;
+  font-size: 28rpx;
+  background-color: #07c160;
+  color: #fff;
+  border-radius: 5rpx;
+}
+
+.btn[disabled] {
+  background-color: #ccc;
+}
+
+.results {
+  background-color: #fff;
+  border-radius: 10rpx;
+  padding: 20rpx;
+}
+
+.result-item {
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  border-radius: 8rpx;
+  background-color: #f9f9f9;
+  border-left: 4rpx solid #ddd;
+}
+
+.result-item[data-status="success"] {
+  border-left-color: #07c160;
+  background-color: #f0f9f4;
+}
+
+.result-item[data-status="error"] {
+  border-left-color: #fa5151;
+  background-color: #fef0f0;
+}
+
+.result-item[data-status="warning"] {
+  border-left-color: #ffbe00;
+  background-color: #fffbf0;
+}
+
+.result-item[data-status="skip"] {
+  border-left-color: #999;
+  background-color: #f5f5f5;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.result-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.result-status {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.status-success {
+  color: #07c160;
+}
+
+.status-error {
+  color: #fa5151;
+}
+
+.status-warning {
+  color: #ffbe00;
+}
+
+.status-skip {
+  color: #999;
+}
+
+.result-message {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.test-canvas {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.error-message {
+  margin: 20rpx;
+  padding: 20rpx;
+  background-color: #fef0f0;
+  border-left: 4rpx solid #fa5151;
+  border-radius: 8rpx;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: #fa5151;
+  line-height: 1.5;
+}
+
+.loading-message {
+  margin: 20rpx;
+  padding: 40rpx;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.empty-message {
+  margin: 20rpx;
+  padding: 40rpx;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}

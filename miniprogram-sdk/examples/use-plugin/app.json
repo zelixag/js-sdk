@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "SDK 插件使用示例",
+    "navigationBarTextStyle": "black"
+  },
+  "plugins": {
+    "xmov-avatar": {
+      "version": "1.0.0",
+      "provider": "plugin://xmov-avatar"
+    }
+  },
+  "usingComponents": {
+    "plugin-avatar": "plugin://xmov-avatar/plugin-avatar"
+  },
+  "sitemapLocation": "sitemap.json"
+}

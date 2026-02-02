@@ -1,0 +1,7 @@
+{
+  "publicComponents": {
+    "plugin-avatar": "components/avatar"
+  },
+  "pages": [],
+  "main": "index.js"
+}

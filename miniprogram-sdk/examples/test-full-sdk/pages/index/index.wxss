@@ -1,0 +1,184 @@
+/* pages/index/index.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 2rpx solid #e0e0e0;
+}
+
+.test-results {
+  background: white;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.result-item {
+  padding: 15rpx;
+  border-radius: 8rpx;
+  border-left: 4rpx solid #ccc;
+}
+
+.result-item.success {
+  background-color: #f0f9ff;
+  border-left-color: #4caf50;
+}
+
+.result-item.warning {
+  background-color: #fff8e1;
+  border-left-color: #ff9800;
+}
+
+.result-item.error {
+  background-color: #ffebee;
+  border-left-color: #f44336;
+}
+
+.result-name {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.result-message {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+}
+
+.canvas-section {
+  background: white;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.avatar-canvas {
+  width: 100%;
+  height: 400rpx;
+  background-color: #000;
+  border-radius: 8rpx;
+}
+
+.status-section {
+  background: white;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.status-label {
+  font-size: 26rpx;
+  color: #666;
+  margin-right: 20rpx;
+  min-width: 120rpx;
+}
+
+.status-label.error {
+  color: #f44336;
+}
+
+.status-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.status-value.error {
+  color: #f44336;
+}
+
+.control-section {
+  background: white;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.control-btn {
+  width: 100%;
+  margin-bottom: 15rpx;
+  padding: 20rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.control-btn:last-child {
+  margin-bottom: 0;
+}
+
+.init-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.start-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.destroy-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.control-btn[disabled] {
+  background-color: #e0e0e0;
+  color: #999;
+}
+
+.info-section {
+  background: white;
+  border-radius: 10rpx;
+  padding: 20rpx;
+}
+
+.info-text {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.8;
+  white-space: pre-line;
+}

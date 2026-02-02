@@ -1,0 +1,28 @@
+<!-- pages/avatar/index.wxml -->
+<view class="container">
+  <!-- 数字人画布 -->
+  <canvas 
+    type="webgl" 
+    id="avatar-canvas" 
+    canvas-id="avatar-canvas"
+    class="avatar-canvas"
+  ></canvas>
+  
+  <!-- 加载进度 -->
+  <view class="progress-container" wx:if="{{progress < 100}}">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{progress}}%;"></view>
+    </view>
+    <text class="progress-text">加载中: {{progress}}%</text>
+  </view>
+  
+  <!-- 状态显示 -->
+  <view class="status">{{status}}</view>
+  
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button class="btn" bindtap="startSession" disabled="{{isPlaying}}">开始会话</button>
+    <button class="btn primary" bindtap="speak">说话</button>
+    <button class="btn" bindtap="stop" disabled="{{!isPlaying}}">停止</button>
+  </view>
+</view>

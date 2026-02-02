@@ -1,0 +1,49 @@
+<!-- 适配层测试页面 -->
+<view class="container">
+  <view class="header">
+    <text class="title">适配层测试</text>
+    <button class="btn" bindtap="rerunTests" disabled="{{isTesting}}">
+      {{isTesting ? '测试中...' : '重新测试'}}
+    </button>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-message" wx:if="{{errorMessage}}">
+    <text class="error-text">{{errorMessage}}</text>
+  </view>
+
+  <!-- 加载提示 -->
+  <view class="loading-message" wx:if="{{isTesting && testResults.length === 0}}">
+    <text class="loading-text">正在加载模块并运行测试...</text>
+  </view>
+
+  <!-- 空状态提示 -->
+  <view class="empty-message" wx:if="{{!isTesting && testResults.length === 0 && !errorMessage}}">
+    <text class="empty-text">暂无测试结果，请点击"重新测试"按钮</text>
+  </view>
+
+  <view class="results">
+    <view 
+      class="result-item" 
+      wx:for="{{testResults}}" 
+      wx:key="name"
+      data-status="{{item.status}}"
+    >
+      <view class="result-header">
+        <text class="result-name">{{item.name}}</text>
+        <text class="result-status status-{{item.status}}">
+          {{item.status === 'success' ? '✓' : item.status === 'error' ? '✗' : item.status === 'warning' ? '⚠' : '⊘'}}
+        </text>
+      </view>
+      <text class="result-message">{{item.message}}</text>
+    </view>
+  </view>
+
+  <!-- Canvas 测试 - 使用 type="webgl" 支持 WebGL2 -->
+  <canvas 
+    type="webgl" 
+    id="test-canvas" 
+    class="test-canvas"
+    style="width: 1px; height: 1px; position: absolute; top: -9999px; left: -9999px; opacity: 0;"
+  ></canvas>
+</view>

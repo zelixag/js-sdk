@@ -1,0 +1,86 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <view class="header">
+    <text class="title">SDK 完整功能测试</text>
+    <text class="subtitle">测试删除重复文件后的适配方案</text>
+  </view>
+
+  <!-- 测试结果 -->
+  <view class="test-results">
+    <view class="section-title">测试结果</view>
+    <view class="result-list">
+      <view 
+        class="result-item {{item.status}}" 
+        wx:for="{{testResults}}" 
+        wx:key="name"
+      >
+        <text class="result-name">{{item.name}}</text>
+        <text class="result-message">{{item.message}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Canvas 区域 -->
+  <view class="canvas-section">
+    <view class="section-title">Canvas 渲染区域</view>
+    <canvas
+      type="webgl"
+      id="avatar-canvas"
+      class="avatar-canvas"
+    ></canvas>
+  </view>
+
+  <!-- 状态显示 -->
+  <view class="status-section">
+    <view class="section-title">状态信息</view>
+    <view class="status-item">
+      <text class="status-label">状态:</text>
+      <text class="status-value">{{status}}</text>
+    </view>
+    <view class="status-item" wx:if="{{progress > 0 && progress < 100}}">
+      <text class="status-label">进度:</text>
+      <text class="status-value">{{progress}}%</text>
+    </view>
+    <view class="status-item" wx:if="{{errorMessage}}">
+      <text class="status-label error">错误:</text>
+      <text class="status-value error">{{errorMessage}}</text>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-section">
+    <view class="section-title">控制操作</view>
+    <button 
+      class="control-btn init-btn" 
+      bindtap="initSDK"
+      disabled="{{isInitialized}}"
+    >
+      初始化 SDK
+    </button>
+    <button 
+      class="control-btn start-btn" 
+      bindtap="startSDK"
+      disabled="{{!isInitialized}}"
+    >
+      启动
+    </button>
+    <button 
+      class="control-btn destroy-btn" 
+      bindtap="destroySDK"
+      disabled="{{!isInitialized}}"
+    >
+      销毁
+    </button>
+  </view>
+
+  <!-- 说明 -->
+  <view class="info-section">
+    <view class="section-title">使用说明</view>
+    <text class="info-text">
+      1. 页面加载后会自动运行基础测试\n
+      2. 点击"初始化 SDK"需要配置真实的 appId、appSecret 等\n
+      3. 查看控制台可以看到详细的测试日志\n
+      4. 所有测试通过说明删除重复文件后的适配方案正确
+    </text>
+  </view>
+</view>

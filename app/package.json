@@ -1,0 +1,38 @@
+{
+  "name": "my-electron-app",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "vite --mode develop",
+    "build": "vue-tsc -b && vite build",
+    "build:dev": "vue-tsc -b && vite build --mode dev",
+    "build:test": "vue-tsc -b && vite build --mode test",
+    "build:pre": "vue-tsc -b && vite build --mode pre",
+    "electron": "electron-vite  --watch --mode develop",
+    "build-electron": "vue-tsc -b && electron-vite build && electron-builder",
+    "preview": "electron-vite preview"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.1",
+    "vue": "^3.5.17"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.4",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "electron": "^39.2.6",
+    "electron-builder": "^24.13.3",
+    "electron-vite": "^3.1.0",
+    "typescript": "~5.8.3",
+    "vite": "^6",
+    "vue-tsc": "^2.2.10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["electron"],
+    "peerDependencyRules": {
+      "ignoreMissing": []
+    }
+  }
+}
