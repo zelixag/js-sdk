@@ -1,9 +1,8 @@
 // pages/index/index.js
-// 注意：这里直接引入构建后的SDK文件
-// 在实际使用中，应该通过npm安装后引入
-
-// 由于小程序环境限制，我们需要模拟SDK的基本功能
-// 实际项目中应该使用: import AvatarSDK from '@xmov/avatar-miniprogram-v2'
+// 引入SDK
+const AvatarSDKModule = require('../../../utils/avatar-sdk.js');
+const AvatarSDK = AvatarSDKModule.default || AvatarSDKModule;
+const { SDKState, ConnectionStatus } = AvatarSDKModule;
 
 Page({
   data: {
@@ -40,16 +39,32 @@ Page({
     this.addLog('开始初始化SDK...');
     
     try {
-      // 创建模拟的SDK实例
-      // 实际使用时应该是:
-      // const sdk = new AvatarSDK({
-      //   appId: 'YOUR_APP_ID',
-      //   appSecret: 'YOUR_APP_SECRET',
-      //   serverUrl: 'wss://your-server.com',
-      //   canvas: { id: 'avatar-canvas' }
-      // });
-      
-      const sdk = this.createMockSDK();
+      // 创建SDK实例
+      const sdk = new AvatarSDK({
+        appId: 'demo-app-id',
+        appSecret: 'demo-app-secret',
+        serverUrl: 'wss://demo-server.com',
+        canvas: {
+          id: 'avatar-canvas'
+        },
+        logger: {
+          level: 'debug',
+          console: true
+        },
+        onReady: () => {
+          this.addLog('SDK onReady回调触发');
+        },
+        onError: (error) => {
+          this.addLog(`SDK onError回调: ${error.message}`);
+          this.setData({
+            errorMessage: error.message
+          });
+        },
+        onStateChange: (state) => {
+          this.addLog(`SDK onStateChange回调: ${state}`);
+          this.updateStatus();
+        }
+      });
       
       this.setData({ 
         sdk,
@@ -57,19 +72,56 @@ Page({
         errorMessage: ''
       });
       
-      // 模拟初始化过程
-      setTimeout(() => {
-        this.setData({ sdkState: 'initialized' });
-        this.addLog('SDK初始化成功');
-        
-        wx.showToast({
-          title: '初始化成功',
-          icon: 'success'
+      this.addLog('SDK实例创建成功');
+      
+      // 监听SDK事件
+      sdk.on('ready', () => {
+        this.addLog('SDK事件: ready');
+        this.updateStatus();
+      });
+      
+      sdk.on('error', (error) => {
+        this.addLog(`SDK事件: error - ${error.message}`);
+        this.updateStatus();
+      });
+      
+      sdk.on('connected', () => {
+        this.addLog('SDK事件: connected');
+        this.updateStatus();
+      });
+      
+      sdk.on('disconnected', () => {
+        this.addLog('SDK事件: disconnected');
+        this.updateStatus();
+      });
+      
+      // 初始化SDK
+      sdk.init()
+        .then(() => {
+          this.addLog('SDK初始化成功');
+          this.setData({ sdkState: 'initialized' });
+          this.updateStatus();
+          
+          wx.showToast({
+            title: '初始化成功',
+            icon: 'success'
+          });
+        })
+        .catch((error) => {
+          this.addLog(`SDK初始化失败: ${error.message}`);
+          this.setData({
+            sdkState: 'error',
+            errorMessage: error.message
+          });
+          
+          wx.showToast({
+            title: '初始化失败',
+            icon: 'none'
+          });
         });
-      }, 1000);
       
     } catch (error) {
-      this.addLog(`初始化失败: ${error.message}`);
+      this.addLog(`创建SDK实例失败: ${error.message}`);
       this.setData({
         sdkState: 'error',
         errorMessage: error.message
@@ -84,74 +136,120 @@ Page({
 
   // 启动SDK
   onStart() {
+    if (!this.data.sdk) {
+      wx.showToast({
+        title: '请先初始化SDK',
+        icon: 'none'
+      });
+      return;
+    }
+    
     this.addLog('启动SDK...');
     
-    this.setData({ sdkState: 'connecting' });
-    
-    // 模拟连接过程
-    setTimeout(() => {
-      this.setData({ 
-        sdkState: 'connected',
-        connectionStatus: 'connected'
-      });
-      this.addLog('连接成功');
-      
-      // 开始运行
-      setTimeout(() => {
-        this.setData({ sdkState: 'running' });
-        this.addLog('SDK运行中');
+    this.data.sdk.start()
+      .then(() => {
+        this.addLog('SDK启动成功');
+        this.updateStatus();
         this.initCanvas();
         
         wx.showToast({
           title: '启动成功',
           icon: 'success'
         });
-      }, 500);
-    }, 1000);
+      })
+      .catch((error) => {
+        this.addLog(`SDK启动失败: ${error.message}`);
+        this.setData({
+          errorMessage: error.message
+        });
+        
+        wx.showToast({
+          title: '启动失败',
+          icon: 'none'
+        });
+      });
   },
 
   // 暂停SDK
   onPause() {
+    if (!this.data.sdk) return;
+    
     this.addLog('暂停SDK...');
     
-    this.setData({ sdkState: 'paused' });
-    this.addLog('SDK已暂停');
-    
-    wx.showToast({
-      title: '已暂停',
-      icon: 'success'
-    });
+    this.data.sdk.pause()
+      .then(() => {
+        this.addLog('SDK已暂停');
+        this.updateStatus();
+        
+        wx.showToast({
+          title: '已暂停',
+          icon: 'success'
+        });
+      })
+      .catch((error) => {
+        this.addLog(`暂停失败: ${error.message}`);
+      });
   },
 
   // 恢复SDK
   onResume() {
+    if (!this.data.sdk) return;
+    
     this.addLog('恢复SDK...');
     
-    this.setData({ sdkState: 'running' });
-    this.addLog('SDK已恢复');
-    
-    wx.showToast({
-      title: '已恢复',
-      icon: 'success'
-    });
+    this.data.sdk.resume()
+      .then(() => {
+        this.addLog('SDK已恢复');
+        this.updateStatus();
+        
+        wx.showToast({
+          title: '已恢复',
+          icon: 'success'
+        });
+      })
+      .catch((error) => {
+        this.addLog(`恢复失败: ${error.message}`);
+      });
   },
 
   // 销毁SDK
   onDestroy() {
+    if (!this.data.sdk) return;
+    
     this.addLog('销毁SDK...');
     
-    this.setData({ 
-      sdkState: 'destroyed',
-      connectionStatus: 'disconnected',
-      sdk: null
-    });
-    
-    this.addLog('SDK已销毁');
-    
-    wx.showToast({
-      title: '已销毁',
-      icon: 'success'
-    });
+    this.data.sdk.destroy()
+      .then(() => {
+        this.addLog('SDK已销毁');
+        this.setData({ 
+          sdk: null,
+          sdkState: 'destroyed',
+          connectionStatus: 'disconnected'
+        });
+        
+        wx.showToast({
+          title: '已销毁',
+          icon: 'success'
+        });
+      })
+      .catch((error) => {
+        this.addLog(`销毁失败: ${error.message}`);
+      });
+  },
+
+  // 更新状态显示
+  updateStatus() {
+    if (this.data.sdk) {
+      const state = this.data.sdk.getState();
+      const status = this.data.sdk.getStatus ? this.data.sdk.getStatus() : 'unknown';
+      
+      this.setData({
+        sdkState: state || 'unknown',
+        connectionStatus: status
+      });
+      
+      this.addLog(`状态更新: SDK=${state}, Connection=${status}`);
+    }
   },
 
   // 初始化Canvas
@@ -207,23 +305,11 @@ Page({
     ctx.font = '20px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('数字人SDK', width / 2, height / 2 - 10);
+    ctx.fillText('数字人SDK v2.0', width / 2, height / 2 - 10);
     ctx.font = '14px sans-serif';
-    ctx.fillText('v2.0', width / 2, height / 2 + 15);
+    ctx.fillText('真实SDK已加载', width / 2, height / 2 + 15);
     
     this.addLog('Canvas绘制完成');
-  },
-
-  // 创建模拟SDK
-  createMockSDK() {
-    return {
-      state: 'uninitialized',
-      init: () => Promise.resolve(),
-      start: () => Promise.resolve(),
-      pause: () => Promise.resolve(),
-      resume: () => Promise.resolve(),
-      destroy: () => Promise.resolve()
-    };
   },
 
   // 添加日志
