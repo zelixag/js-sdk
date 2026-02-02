@@ -23,6 +23,10 @@ export class AvatarSDK {
   private lifecycleManager: LifecycleManager;
   private modules: Map<string, any>;
   private plugins: Map<string, Plugin>;
+  private webSocket: any | null = null;
+  private sessionId: string = '';
+  private canvas: any | null = null;
+  private gl: any | null = null;
 
   constructor(config: SDKConfig) {
     this.validateConfig(config);
@@ -46,9 +50,33 @@ export class AvatarSDK {
   async init(): Promise<void> {
     try {
       console.log('[AvatarSDK] Initializing SDK...');
+      this.stateManager.setState(SDKState.INITIALIZING);
+      
+      // 1. 获取Canvas节点
+      console.log('[AvatarSDK] Step 1: Getting canvas node...');
+      await this.initCanvas();
+      console.log('[AvatarSDK] Canvas node obtained');
+      
+      // 2. 创建WebGL上下文
+      console.log('[AvatarSDK] Step 2: Creating WebGL context...');
+      await this.initWebGL();
+      console.log('[AvatarSDK] WebGL context created');
+      
+      // 3. 连接WebSocket服务器
+      console.log('[AvatarSDK] Step 3: Connecting to WebSocket server...');
+      await this.connectWebSocket();
+      console.log('[AvatarSDK] WebSocket connected');
+      
+      // 4. 发送初始化消息
+      console.log('[AvatarSDK] Step 4: Sending init message...');
+      await this.sendInitMessage();
+      console.log('[AvatarSDK] Init message sent');
       
       // 执行生命周期初始化
       await this.lifecycleManager.init();
+      
+      // 更新状态
+      this.stateManager.setState(SDKState.INITIALIZED);
       
       // 触发ready事件
       this.eventBus.emit(EventType.READY);
@@ -61,6 +89,7 @@ export class AvatarSDK {
       console.log('[AvatarSDK] SDK initialized successfully');
     } catch (error) {
       console.error('[AvatarSDK] Initialization failed:', error);
+      this.stateManager.setState(SDKState.ERROR);
       
       const sdkError = error instanceof SDKError
         ? error
@@ -68,6 +97,184 @@ export class AvatarSDK {
       
       this.handleError(sdkError);
       throw sdkError;
+    }
+  }
+
+  /**
+   * 初始化Canvas
+   */
+  private async initCanvas(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const query = wx.createSelectorQuery();
+      query.select(`#${this.config.canvas!.id}`)
+        .fields({ node: true, size: true })
+        .exec((res) => {
+          if (!res || !res[0] || !res[0].node) {
+            reject(new SDKError(ErrorCode.CANVAS_NOT_FOUND, `Canvas not found: ${this.config.canvas!.id}`));
+            return;
+          }
+          
+          this.canvas = res[0].node;
+          const dpr = wx.getSystemInfoSync().pixelRatio;
+          this.canvas.width = res[0].width * dpr;
+          this.canvas.height = res[0].height * dpr;
+          
+          console.log(`[AvatarSDK] Canvas size: ${this.canvas.width}x${this.canvas.height}`);
+          resolve();
+        });
+    });
+  }
+
+  /**
+   * 初始化WebGL
+   */
+  private async initWebGL(): Promise<void> {
+    if (!this.canvas) {
+      throw new SDKError(ErrorCode.CANVAS_NOT_FOUND, 'Canvas not initialized');
+    }
+    
+    this.gl = this.canvas.getContext('webgl', {
+      antialias: this.config.render?.antialias !== false,
+      preserveDrawingBuffer: true
+    });
+    
+    if (!this.gl) {
+      throw new SDKError(ErrorCode.WEBGL_NOT_SUPPORT, 'Failed to create WebGL context');
+    }
+    
+    // 设置视口
+    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    this.gl.clearColor(0, 0, 0, 1);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    
+    console.log('[AvatarSDK] WebGL context created successfully');
+  }
+
+  /**
+   * 连接WebSocket
+   */
+  private async connectWebSocket(): Promise<void> {
+    const url = this.buildWebSocketUrl();
+    console.log('[AvatarSDK] Connecting to:', url);
+    
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new SDKError(ErrorCode.CONNECT_TIMEOUT, 'WebSocket connection timeout'));
+      }, this.config.network?.timeout || 10000);
+      
+      this.webSocket = wx.connectSocket({
+        url,
+        success: () => {
+          console.log('[AvatarSDK] WebSocket created');
+        },
+        fail: (error) => {
+          clearTimeout(timeout);
+          reject(new SDKError(ErrorCode.WEBSOCKET_ERROR, 'Failed to create WebSocket', error));
+        }
+      });
+      
+      this.webSocket.onOpen(() => {
+        clearTimeout(timeout);
+        console.log('[AvatarSDK] WebSocket connection opened');
+        this.stateManager.setConnectionStatus(ConnectionStatus.CONNECTED);
+        this.eventBus.emit(EventType.CONNECTED);
+        resolve();
+      });
+      
+      this.webSocket.onMessage((res: any) => {
+        this.handleWebSocketMessage(res.data);
+      });
+      
+      this.webSocket.onError((error: any) => {
+        console.error('[AvatarSDK] WebSocket error:', error);
+        this.handleError(new SDKError(ErrorCode.WEBSOCKET_ERROR, 'WebSocket error', error));
+      });
+      
+      this.webSocket.onClose((res: any) => {
+        console.log('[AvatarSDK] WebSocket closed:', res.code, res.reason);
+        this.stateManager.setConnectionStatus(ConnectionStatus.DISCONNECTED);
+        this.eventBus.emit(EventType.DISCONNECTED);
+      });
+    });
+  }
+
+  /**
+   * 构建WebSocket URL
+   */
+  private buildWebSocketUrl(): string {
+    const url = new URL(this.config.serverUrl);
+    url.searchParams.set('appId', this.config.appId);
+    url.searchParams.set('appSecret', this.config.appSecret);
+    url.searchParams.set('sdkVersion', '2.0.0');
+    url.searchParams.set('platform', 'miniprogram');
+    return url.toString();
+  }
+
+  /**
+   * 发送初始化消息
+   */
+  private async sendInitMessage(): Promise<void> {
+    if (!this.webSocket) {
+      throw new SDKError(ErrorCode.WEBSOCKET_ERROR, 'WebSocket not connected');
+    }
+    
+    this.sessionId = 'session_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 9);
+    
+    const initMessage = {
+      type: 'init_session',
+      sessionId: this.sessionId,
+      canvasInfo: {
+        width: this.canvas?.width || 0,
+        height: this.canvas?.height || 0
+      },
+      userAgent: 'miniprogram',
+      sdkVersion: '2.0.0',
+      timestamp: Date.now()
+    };
+    
+    this.webSocket.send({
+      data: JSON.stringify(initMessage)
+    });
+    
+    console.log('[AvatarSDK] Init message sent:', initMessage);
+    
+    // 等待服务器响应
+    return new Promise((resolve) => {
+      // 设置超时，即使没收到响应也继续
+      setTimeout(() => {
+        console.log('[AvatarSDK] Init message sent, continuing...');
+        resolve();
+      }, 2000);
+    });
+  }
+
+  /**
+   * 处理WebSocket消息
+   */
+  private handleWebSocketMessage(data: any): void {
+    try {
+      const message = typeof data === 'string' ? JSON.parse(data) : data;
+      console.log('[AvatarSDK] WebSocket message received:', message.type);
+      
+      // EventType.MESSAGE 不存在，使用字符串
+      this.eventBus.emit('message', message);
+      
+      switch (message.type) {
+        case 'session_started':
+          console.log('[AvatarSDK] Session started');
+          break;
+        case 'render_data':
+          // 处理渲染数据
+          break;
+        case 'error':
+          this.handleError(new SDKError(
+            message.payload?.code || ErrorCode.UNKNOWN_ERROR,
+            message.payload?.message || 'Unknown error'
+          ));
+          break;
+      }
+    } catch (error) {
+      console.error('[AvatarSDK] Failed to handle WebSocket message:', error);
     }
   }
 

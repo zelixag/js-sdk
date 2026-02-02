@@ -12,11 +12,39 @@ export declare class AvatarSDK {
     private lifecycleManager;
     private modules;
     private plugins;
+    private webSocket;
+    private sessionId;
+    private canvas;
+    private gl;
     constructor(config: SDKConfig);
     /**
      * 初始化SDK
      */
     init(): Promise<void>;
+    /**
+     * 初始化Canvas
+     */
+    private initCanvas;
+    /**
+     * 初始化WebGL
+     */
+    private initWebGL;
+    /**
+     * 连接WebSocket
+     */
+    private connectWebSocket;
+    /**
+     * 构建WebSocket URL
+     */
+    private buildWebSocketUrl;
+    /**
+     * 发送初始化消息
+     */
+    private sendInitMessage;
+    /**
+     * 处理WebSocket消息
+     */
+    private handleWebSocketMessage;
     /**
      * 启动SDK
      */
