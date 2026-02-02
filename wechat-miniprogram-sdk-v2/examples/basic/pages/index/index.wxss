@@ -3,27 +3,168 @@
   position: relative;
   width: 100vw;
   height: 100vh;
+  background-color: #000;
+  overflow: hidden;
 }
 
-.controls {
+/* Canvas 样式 */
+.avatar-canvas {
   position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  border-radius: 10px;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1a1a1a;
 }
 
+/* 状态面板 */
 .status-panel {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 12px;
+  top: 20rpx;
+  left: 20rpx;
+  right: 20rpx;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10rpx;
+  padding: 20rpx;
+  backdrop-filter: blur(10px);
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.status-item:last-child {
+  margin-bottom: 0;
+}
+
+.status-label {
+  color: #999;
+  font-size: 28rpx;
+}
+
+.status-value {
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.status-success {
+  color: #52c41a;
+}
+
+.status-error {
+  color: #ff4d4f;
+  font-size: 24rpx;
+}
+
+/* 控制按钮 */
+.controls {
+  position: absolute;
+  bottom: 40rpx;
+  left: 20rpx;
+  right: 20rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20rpx;
+  border-radius: 10rpx;
+  backdrop-filter: blur(10px);
+}
+
+.control-btn {
+  flex: 1;
+  min-width: 150rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background-color: #1890ff;
+  color: #fff;
+  border: none;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  padding: 0;
+}
+
+.control-btn:active {
+  background-color: #096dd9;
+}
+
+.control-btn[disabled] {
+  background-color: #434343;
+  color: #666;
+}
+
+.btn-danger {
+  background-color: #ff4d4f;
+}
+
+.btn-danger:active {
+  background-color: #cf1322;
+}
+
+/* 日志面板 */
+.log-panel {
+  position: absolute;
+  bottom: 180rpx;
+  left: 20rpx;
+  right: 20rpx;
+  height: 400rpx;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 10rpx;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.log-close {
+  color: #1890ff;
+  font-size: 24rpx;
+  font-weight: normal;
+}
+
+.log-content {
+  height: 320rpx;
+  padding: 20rpx;
+}
+
+.log-item {
+  margin-bottom: 15rpx;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.log-time {
+  color: #999;
+  margin-right: 10rpx;
+}
+
+.log-message {
+  color: #fff;
+}
+
+/* 日志切换按钮 */
+.log-toggle {
+  position: absolute;
+  bottom: 180rpx;
+  right: 20rpx;
+  background-color: rgba(24, 144, 255, 0.8);
+  color: #fff;
+  padding: 15rpx 30rpx;
+  border-radius: 50rpx;
+  font-size: 24rpx;
+  backdrop-filter: blur(10px);
 }

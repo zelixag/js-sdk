@@ -1,21 +1,83 @@
 <!--pages/index/index.wxml-->
 <view class="container">
+  <!-- Canvas 渲染区域 -->
   <canvas
-    type="webgl"
+    type="2d"
     id="avatar-canvas"
-    style="width: 100vw; height: 100vh;"
-    bindtouchstart="handleTouchStart"
-    bindtouchmove="handleTouchMove"
-    bindtouchend="handleTouchEnd"
+    class="avatar-canvas"
   ></canvas>
-  <view class="controls">
-    <button bindtap="onStart">启动</button>
-    <button bindtap="onPause">暂停</button>
-    <button bindtap="onResume">恢复</button>
-    <button bindtap="onStop">停止</button>
-  </view>
+  
+  <!-- 状态面板 -->
   <view class="status-panel">
-    <view>SDK状态: {{sdkState}}</view>
-    <view>连接状态: {{connectionStatus}}</view>
+    <view class="status-item">
+      <text class="status-label">SDK状态:</text>
+      <text class="status-value {{sdkState === 'running' ? 'status-success' : ''}}">{{sdkState}}</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">连接状态:</text>
+      <text class="status-value {{connectionStatus === 'connected' ? 'status-success' : ''}}">{{connectionStatus}}</text>
+    </view>
+    <view class="status-item" wx:if="{{errorMessage}}">
+      <text class="status-label">错误:</text>
+      <text class="status-value status-error">{{errorMessage}}</text>
+    </view>
+  </view>
+  
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button 
+      class="control-btn" 
+      bindtap="onInit" 
+      disabled="{{sdkState !== 'uninitialized' && sdkState !== 'destroyed'}}"
+    >
+      初始化
+    </button>
+    <button 
+      class="control-btn" 
+      bindtap="onStart" 
+      disabled="{{sdkState !== 'initialized' && sdkState !== 'paused'}}"
+    >
+      启动
+    </button>
+    <button 
+      class="control-btn" 
+      bindtap="onPause" 
+      disabled="{{sdkState !== 'running'}}"
+    >
+      暂停
+    </button>
+    <button 
+      class="control-btn" 
+      bindtap="onResume" 
+      disabled="{{sdkState !== 'paused'}}"
+    >
+      恢复
+    </button>
+    <button 
+      class="control-btn btn-danger" 
+      bindtap="onDestroy" 
+      disabled="{{sdkState === 'uninitialized' || sdkState === 'destroyed'}}"
+    >
+      销毁
+    </button>
+  </view>
+  
+  <!-- 日志面板 -->
+  <view class="log-panel" wx:if="{{showLog}}">
+    <view class="log-header">
+      <text>日志</text>
+      <text class="log-close" bindtap="toggleLog">关闭</text>
+    </view>
+    <scroll-view class="log-content" scroll-y>
+      <view class="log-item" wx:for="{{logs}}" wx:key="index">
+        <text class="log-time">{{item.time}}</text>
+        <text class="log-message">{{item.message}}</text>
+      </view>
+    </scroll-view>
+  </view>
+  
+  <!-- 日志按钮 -->
+  <view class="log-toggle" bindtap="toggleLog">
+    <text>{{showLog ? '隐藏' : '显示'}}日志</text>
   </view>
 </view>
